@@ -1,0 +1,36 @@
+.alert {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem 2rem;
+  padding: 1rem;
+  background: rgb(212, 88, 88);
+  border-radius: 20px;
+  color: #fff;
+  z-index: 100;
+  animation-name: toTop;
+  animation-duration: 1s;
+  font-family: "Secular One", sans-serif;
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-left: 1rem;
+  }
+
+  img:hover {
+    cursor: pointer;
+  }
+}
+
+@keyframes toTop {
+  0% {
+    transform: translateX(1rem);
+  }
+  80% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

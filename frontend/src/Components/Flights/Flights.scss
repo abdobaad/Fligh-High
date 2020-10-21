@@ -1,0 +1,116 @@
+@mixin ball {
+  content: "";
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  background-color: #e5efee;
+  z-index: 1;
+  border-radius: 50%;
+  bottom: -1rem;
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flights-container {
+  width: 70%;
+
+  .flight:first-child {
+    border-radius: 20px 20px 0 0;
+  }
+  .flight:last-child {
+    border: none;
+  }
+
+  .flight {
+    display: flex;
+    background-color: #fff;
+    padding: 1rem;
+    width: 95%;
+    margin: 0 0.1rem;
+    border-bottom: 2px dashed #e5efee;
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+
+    .logo {
+      width: 25%;
+      @include center();
+    }
+    .name-duration {
+      width: 15%;
+      @include center();
+      flex-direction: column;
+      text-transform: uppercase;
+
+      .company_name {
+        font-weight: bold;
+      }
+      .flight_duration {
+        color: #b4955a;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+    }
+    .airport-data {
+      width: 20%;
+      @include center();
+      flex-direction: column;
+      font-weight: bold;
+
+      .place {
+        font-size: 1.6rem;
+      }
+      .time {
+      }
+    }
+
+    .flight_booking {
+      width: 25%;
+      @include center();
+      flex-direction: column;
+      .price {
+        width: 100%;
+        text-align: end;
+        margin-right: 4rem;
+      }
+
+      button {
+        font-family: "Montserrat", sans-serif;
+        padding: 0.7rem 1.2rem;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-top: 0.5rem;
+        color: #fff;
+        background-color: #b4955a;
+      }
+      button:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .flight::after {
+    @include ball();
+
+    left: -1rem;
+  }
+  .flight::before {
+    @include ball();
+    right: -1rem;
+  }
+
+  .flight:last-child {
+    border-radius: 0 0 20px 20px;
+  }
+
+  .flight:last-child::after {
+    width: 0;
+  }
+  .flight:last-child::before {
+    width: 0;
+  }
+}

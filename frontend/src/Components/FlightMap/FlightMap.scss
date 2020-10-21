@@ -1,0 +1,95 @@
+@mixin centerColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@mixin priceBall {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  position: absolute;
+  background-color: #b4955a;
+  top: 2rem;
+}
+.flight_map-container {
+  background-color: #4f5c56;
+  width: 30%;
+  border-radius: 20px;
+  overflow: hidden;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+
+  .top {
+    display: flex;
+    height: 20%;
+    padding: 1rem 2rem;
+    justify-content: space-between;
+    align-items: center;
+    .stops {
+      font-size: 0.7rem;
+    }
+    .loc {
+      @include centerColumn();
+
+      .title {
+        font-size: 0.6rem;
+        font-weight: bold;
+      }
+      span {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    }
+  }
+  .bottom {
+    height: 30%;
+    width: 100%;
+    background-color: #0f1b1a;
+    // padding: 0.5rem 0;
+    @include centerColumn();
+    justify-content: start;
+
+    .stops-filter {
+      margin-top: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      .stop {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.8rem;
+        background-color: #b4955a;
+        border-radius: 20px;
+        font-weight: bold;
+      }
+    }
+    .price-filter {
+      padding: 0.5rem;
+      position: relative;
+      width: 100%;
+      height: 75%;
+      .title {
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .prices-ligne {
+        width: 95%;
+
+        background-color: #e5efee9a;
+        height: 1.5px;
+        border-radius: 20px;
+        margin: 0 auto;
+      }
+
+      .min {
+        @include priceBall();
+        left: 3rem;
+      }
+      .max {
+        @include priceBall();
+        right: 5rem;
+      }
+    }
+  }
+}

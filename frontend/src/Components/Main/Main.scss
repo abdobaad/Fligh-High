@@ -1,0 +1,321 @@
+$light-color: #e5efee;
+$dark-gold: #b4955a;
+$dark-green: #203836;
+
+@mixin CitiesList {
+  position: absolute;
+  top: 3.4rem;
+  z-index: 2000;
+  width: 50%;
+  background-color: $light-color;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 10px 20px -15px #333;
+}
+
+@mixin citiesCont {
+  @include CitiesList();
+  .city-matching:first-child {
+    border-top: 1px solid #fff;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .city-matching {
+    background-color: inherit;
+    height: 2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    color: $dark-green;
+    font-family: "Montserrat", sans-serif;
+    overflow: hidden;
+    border-bottom: 2px dashed #fff;
+  }
+  .city-matching:last-child {
+    border: none;
+  }
+  .city-matching:hover {
+    cursor: pointer;
+  }
+}
+
+.main_container {
+  background-color: $light-color;
+  width: 80%;
+  padding: 1rem;
+
+  .small {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background-color: $light-color;
+    border-radius: 20px;
+    color: $dark-green;
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+  }
+  .small:hover {
+    cursor: pointer;
+  }
+  #icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0 1.5rem 0 1rem;
+  }
+  .arrow {
+    width: 1.5rem;
+    border-radius: 50%;
+    padding: 1px;
+  }
+
+  .arrow:active,
+  .arrow:focus {
+    background-color: #afd1cd27;
+    transition: 200ms;
+  }
+
+  .search-section {
+    background-color: #fff;
+
+    width: 100%;
+
+    border-radius: 2rem;
+    margin: auto;
+    padding: 1rem;
+
+    .search_top:first-child {
+      margin-bottom: 1rem;
+    }
+
+    .right-container {
+      width: 50%;
+      display: flex;
+      padding-left: 2rem;
+      justify-content: space-between;
+
+      .traveller {
+        .number_of {
+          display: flex;
+          align-items: center;
+          padding-left: 1rem;
+
+          .num {
+            font-size: 1.2rem;
+          }
+
+          .change {
+            display: flex;
+            flex-direction: column;
+            margin-left: 2rem;
+          }
+        }
+      }
+    }
+
+    .search_top {
+      width: 100%;
+      display: flex;
+
+      .location-container {
+        display: flex;
+        width: 50%;
+        position: relative;
+        background-color: $light-color;
+        padding: 0.5rem;
+        padding-left: 1rem;
+        align-items: center;
+        border-radius: 30px;
+
+        .loc {
+          display: flex;
+          width: 40%;
+          overflow: hidden;
+
+          img {
+            width: 10%;
+          }
+          input {
+            width: 90%;
+          }
+          .cities_search--container-1 {
+            left: 0;
+
+            @include citiesCont();
+          }
+          .cities_search--container-2 {
+            right: 0;
+            @include citiesCont();
+          }
+          .cities_search--container-1::before {
+            content: "";
+            height: 3rem;
+            width: 2rem;
+            background-color: $light-color;
+            position: absolute;
+            top: -2rem;
+            z-index: -1;
+            border-radius: 7px;
+          }
+          .cities_search--container-2::after {
+            content: "";
+            height: 3rem;
+            width: 2rem;
+            background-color: $light-color;
+            position: absolute;
+            top: -2rem;
+            right: 0;
+            z-index: -1;
+            border-radius: 7px;
+          }
+          #loc-icon {
+            margin-right: 1rem;
+            position: relative;
+            width: 1.5rem;
+            z-index: 2002;
+          }
+        }
+
+        input {
+          border: none;
+          background-color: inherit;
+          color: $dark-green;
+          font-family: "Montserrat", sans-serif;
+          font-weight: bold;
+          font-size: 1rem;
+        }
+        input:active,
+        input:focus {
+          border: none;
+          outline: none;
+        }
+
+        .middle-icon {
+          background-color: $dark-green;
+          padding: 0.3rem;
+          border-radius: 50%;
+          display: flex;
+          margin: 0 1.8rem;
+          margin-right: 1.4rem;
+
+          #icon {
+            margin: 2px;
+          }
+        }
+        .middle-icon:hover {
+          cursor: pointer;
+          box-shadow: 0px 0px 5px 2px rgba(131, 131, 131, 0.657);
+          transition: 400ms;
+        }
+      }
+      .traveller_date-container {
+        .calendar {
+          input {
+            //  width: 85%;
+            padding: 0 1rem;
+            height: 3.1rem;
+            border: none;
+            outline: none;
+            background-color: inherit;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: "Montserrat", sans-serif;
+            border-radius: 20px;
+            // margin-left: -0.4rem;
+          }
+
+          input:hover {
+            cursor: pointer;
+          }
+          input:focus,
+          input:active {
+            outline: none;
+          }
+        }
+      }
+    }
+
+    .search_bottom {
+      width: 100%;
+      display: flex;
+
+      .flight_type--container {
+        width: 50%;
+        display: flex;
+        background-color: $light-color;
+        height: 3rem;
+        align-items: center;
+        border-radius: 30px;
+        overflow: hidden;
+        .type {
+          width: calc(95% / 3);
+          text-align: center;
+          font-family: "Montserrat", sans-serif;
+          font-weight: bold;
+          color: $dark-green;
+          letter-spacing: 2px;
+          height: 87%;
+          margin: auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 20px;
+        }
+
+        .type:hover {
+          cursor: pointer;
+        }
+
+        .active {
+          background-color: $dark-green;
+          color: #fff;
+        }
+      }
+
+      .class_search-container {
+        .class {
+          select {
+            border: #b4955a;
+            background: inherit;
+            margin-left: -1rem;
+            font-size: 0.85rem;
+            height: 3rem;
+            border-radius: 20px;
+            width: 75%;
+            outline: none;
+            color: $dark-green;
+            font-family: "Montserrat", sans-serif;
+            font-weight: bolder;
+          }
+        }
+        .search {
+          overflow: hidden;
+          transition: 500ms;
+
+          display: flex;
+          justify-content: center;
+          outline: none;
+          border: none;
+          color: #fff;
+          font-size: 1rem;
+          text-transform: uppercase;
+          background-color: #b4955a;
+          font-family: "Montserrat", sans-serif;
+
+          letter-spacing: 2px;
+        }
+        .search:hover {
+          box-shadow: 0 2px 4px -3px $dark-green;
+          cursor: pointer;
+          transform: translateY(-3px);
+        }
+        .search:focus,
+        .search:active {
+          transform: translateY(0px);
+          outline: none;
+        }
+      }
+    }
+  }
+}
