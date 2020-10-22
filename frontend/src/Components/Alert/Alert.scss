@@ -4,7 +4,7 @@
   right: 0;
   margin: 1rem 2rem;
   padding: 1rem;
-  background: rgb(212, 88, 88);
+
   border-radius: 20px;
   color: #fff;
   z-index: 100;
@@ -21,6 +21,13 @@
   img:hover {
     cursor: pointer;
   }
+}
+
+.success {
+  background: #58d46d;
+}
+.error {
+  background: #d45858;
 }
 
 @keyframes toTop {

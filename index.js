@@ -228,7 +228,7 @@ app.post("/users/login", async (req, res) => {
     if (!isExist) {
       res.json({
         error: true,
-        message: "There in no user with these data",
+        message: "A user with this credentials doesn't exist",
       });
     }
     const checkPassword = await bcrypt.compare(password, isExist.password);
@@ -236,7 +236,7 @@ app.post("/users/login", async (req, res) => {
     if (!checkPassword) {
       res.json({
         error: true,
-        message: "There in no user with these data",
+        message: "A user with this credentials doesn't exist",
       });
     }
 

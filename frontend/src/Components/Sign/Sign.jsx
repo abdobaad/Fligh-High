@@ -3,8 +3,11 @@ import React,{useState} from 'react';
 //Components
 import TextFeild from '../TextFeild/TextFeild';
 import Alert from "../Alert/Alert";
+import Loading from '../Loading/Loading';
 //react router
 import {Link} from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
 //redux
 import {connect} from "react-redux";
 
@@ -22,12 +25,12 @@ import back from "../../sources/icons/Back.svg";
 //styles
 import "./Sign.scss";
 
+
   
 
 const Sign = (props) => {
     const {Sign,type} = props;
-    console.log(props);
-
+    let history = useHistory();
     const [registerUserState,setRegisterUserState] = useState({
         fullName:"",
         email:"",
@@ -39,6 +42,9 @@ const Sign = (props) => {
         password:"",
     })
     const [showAlert,setShowAlert] = useState(false); 
+    const [AlertType,setAlertType] = useState(true);
+    const [message,setMessage] = useState([]);
+    const [isLoading,setIsLoading] = useState(false);
 
     const showValue = (name,value) =>{ 
       if(type=== 'register'){
@@ -59,18 +65,39 @@ const Sign = (props) => {
     };
     const SubmitHandler = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         if(type==="register"){
             const {fullName,email,password,confirmPassword} = registerUserState;
             if(!fullName || !email || !password || !confirmPassword){
-                setShowAlert(true);
+                setIsLoading(false);
+                AlertHandler("All items are required");
+               
             }
-            console.log(fullName,email,password,confirmPassword);
+          //  console.log(fullName,email,password,confirmPassword);
         }else if(type==="login"){
-            const {email, password} = LoginUserState;
-       const user = await props.dispatch(LoginUser(LoginUserState));
-       console.log(user);
+            const user = await props.dispatch(LoginUser(LoginUserState));  
+            setIsLoading(false);     
+            if(user.payload.error){
+                return AlertHandler(user.payload.message);
+            }else{
+            setAlertType(false);
+            AlertHandler(user.payload.message);
+            setTimeout(() => {
+                history.push("/profile");
+            }, 2000);
+            
+            }
+            
            
         }
+    }
+
+    const AlertHandler = (msg) => {
+        setMessage(msg);
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false)
+        }, 3000);
     }
 
     const closeHandler = () => {
@@ -79,7 +106,7 @@ const Sign = (props) => {
       };
     return (
         <div className="sign-container">
-        {showAlert ? <Alert err={["All items are required"]} closeError={()=>closeHandler()} /> : null}
+        {showAlert ? <Alert type="user" isError={AlertType} err={message} closeError={()=>closeHandler()} /> : null}
         <div className="background">
         <div className="top-back" />
             <img  src={flight}  alt="flight"/>
@@ -108,7 +135,7 @@ const Sign = (props) => {
                     <TextFeild showValue={showValue} icon={email} name="email" type="email" placehodler="Email" />
                     <TextFeild showValue={showValue} icon={locked} name="password" type="password" placehodler="Password" />
                     
-                    <button className="sign-btn" type="submit" >Sign In</button>
+                    <button className="sign-btn" type="submit" >{isLoading ? <Loading /> :"Sign In"} </button>
                 </>
                }
                

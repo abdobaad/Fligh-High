@@ -1,12 +1,12 @@
 import React from "react";
-import Side from "./Components/Side/Side";
-import Main from "./Components/Main/Main";
+import Side from "../Side/Side";
+import Main from "../Main/Main";
 
 import "./App.scss";
 
 const App = () => {
   return (
-    <div className="app_container">
+    <div className="flights-comp_container">
       <Side />
       <Main />
     </div>
