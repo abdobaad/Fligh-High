@@ -8,16 +8,12 @@ const Port = process.env.PORT || 5000;
 const { User } = require("./Models/UserSchema");
 const { auth } = require("./Middleware/auth");
 const { admin } = require("./Middleware/admin");
-
 const nodemailer = require("nodemailer");
+const  axios  = require("axios");
+
 app.use(cors());
 app.use(express.json());
 
-
-
-app.get("/",(req,res)=>{
-  res.send("login")
-})
 //////////   ///////////
 ////  Users Routes  ///
 ////////   ///////////
@@ -65,7 +61,10 @@ app.put("/users/forgotpassword", async (req, res) => {
     // send mail with defined transport object
     transporter.sendMail(options, (err, body) => {
       if (err) {
-        console.log(err);
+        res.json({
+          sent:false,
+          err
+        });
       }
 
       res.json({
@@ -84,7 +83,7 @@ app.post("/users/resetpassword", auth, async (req, res) => {
   try {
     const { existPassword, newPassword } = req.body;
     const user = await User.findById(req.user);
-    console.log(user);
+  
 
     const checkPassword = await bcrypt.compare(existPassword, user.password);
 
@@ -158,23 +157,24 @@ app.get("/users/auth", auth, async (req, res) => {
       });
     }
 
-    const { firstName, lastName, email } = allowedUser;
-
+    const { fullName, email,avatar } = allowedUser;
     res.status(200).json({
       Auth: true,
       error: false,
-      user: { firstName, lastName, email },
+      user:{ fullName, email,avatar }
     });
-  } catch (error) {
-    res.status(404).json({
+  } catch (err) {
+    res.json({
       error: true,
-      message: "Sorry this user doesn't exist",
+      err,
+      message: "Not Authenticated!",
+      place:"indexjs"
     });
   }
 });
 app.post("/users/register", async (req, res) => {
   try {
-    const { firstName, lastName, userName, email, password } = req.body;
+    const {  fullName, email, password } = req.body;
     //search if there a user with this email
     const isExist = await User.findOne({ email });
 
@@ -194,8 +194,7 @@ app.post("/users/register", async (req, res) => {
     //// create a new user with those data
 
     const newUser = await User.create({
-      firstName,
-      lastName,
+      fullName,
       email,
       password: hashPassword,
     });
@@ -219,57 +218,52 @@ app.post("/users/register", async (req, res) => {
   }
 });
 app.post("/users/login", async (req, res) => {
-  console.log(req.body);
   try {
     const { email, password } = req.body;
-    //check if this user exist
-    const isExist = await User.findOne({ email });
-
-    if (!isExist) {
-      res.json({
-        error: true,
-        message: "A user with this credentials doesn't exist",
-      });
-    }
-    const checkPassword = await bcrypt.compare(password, isExist.password);
-
-    if (!checkPassword) {
-      res.json({
-        error: true,
-        message: "A user with this credentials doesn't exist",
-      });
-    }
-
-    //so the user is exist
-    //now get token
-
-    const secret = await process.env.PRIVATE_KEY;
-
-    const genToken = await jwt.sign({ _id: isExist._id }, secret);
-
-    //  add the token to the user data
-
-    isExist.token = genToken;
-
-    await isExist.save();
-
-    res.cookie("auth_token", genToken).json({
-      status: true,
-      message: "you are Logged in",
-      isAuth: true,
-      genToken,
+  //search for the user with the same unique email
+  const userByEmail = await User.findOne({ email });
+  if (!userByEmail) {
+    return res.json({
+      status: false,
+      isAuth: false,
+      message: "Sorry,the email or password correct !!",
     });
+  }
+  //check if the password is correct
+  const passwordCorrect = await bcrypt.compare(password, userByEmail.password);
+  if (!passwordCorrect) {
+    return res.json({
+      status: false,
+      isAuth: false,
+      message: "Sorry,the email or password not correct !!",
+    });
+  }
+  //generate a token
+  const newtoken = await jwt.sign(
+    { _id: userByEmail._id },
+    process.env.PRIVATE_KEY,
+    { expiresIn: '1h' }
+  );
 
-    console.log(genToken);
-  } catch (error) {
+  //change the token to new one
+  userByEmail.token = newtoken;
+  //save data in db
+  await userByEmail.save();
+
+  res.cookie("auth_token", newtoken).json({
+    status: true,
+    message: "you are Logged in",
+    isAuth: true,
+    newtoken,
+  });
+  } catch (err) {
     res.json({
-      error: true,
-      message: "there is an error",
-      error,
-    });
+      error:true,isAuth:false,err
+    })
   }
 });
 app.get("/users/logout", auth, async (req, res) => {
+
   try {
     const user = await User.findById(req.user);
 
@@ -292,6 +286,39 @@ app.get("/users/logout", auth, async (req, res) => {
     });
   }
 });
+
+//////////   ///////////
+//  FLIGHTS Routes   //
+////////   ///////////
+
+app.post("/findflights",async (req,res)=>{
+  try {
+    const { from,to,date,toDate,currency,travellers,type,classType} = req.body;
+ 
+ const url =await `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/${currency}/en-US/${from}-sky/${to}-sky/${date}`;
+ const flights = await axios({
+  "method":"GET", 
+   "url":url,
+  "headers":{
+  "content-type":"application/octet-stream",
+  "x-rapidapi-host":"skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+  "x-rapidapi-key":process.env.SKY_SCANNER_API,
+  "useQueryString":true
+  }});
+
+  res.status(200).json({
+    flights:flights.data
+  })
+  
+  } catch (err) {
+   
+    res.json({
+      error:err.response
+
+    })
+  }
+})
+
 
 app.listen(Port, () => {
   console.log("Server Running at Port:" + Port);

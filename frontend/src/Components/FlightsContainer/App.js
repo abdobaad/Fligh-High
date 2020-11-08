@@ -1,16 +1,38 @@
-import React from "react";
+import React,{useEffect} from "react";
+
+import {connect} from "react-redux";
+
 import Side from "../Side/Side";
 import Main from "../Main/Main";
-
+import Layout from "../../HOC/Layout"
 import "./App.scss";
+import { AuthenticatedUser } from "../../Actions/UserActions/UserAction";
 
-const App = () => {
+
+
+const App = props => {
+ 
+  useEffect(() => {
+    const fetchData = async () =>{
+     await props.dispatch(AuthenticatedUser());
+    }
+
+    fetchData();
+}, [])
   return (
-    <div className="flights-comp_container">
-      <Side />
-      <Main />
-    </div>
+ 
+      <Layout>
+       <Main />
+      </Layout>
+    
+
   );
 };
 
-export default App;
+const mapStateToProps = state => {
+   return{
+     AuthUser : state.UserReducer.AuthUser
+   }
+}
+
+export default connect(mapStateToProps)(App);

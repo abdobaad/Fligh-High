@@ -26,7 +26,7 @@
   overflow: hidden;
   position: relative;
   font-family: "Montserrat", sans-serif;
-
+  z-index: 1;
   .user {
     background-color: #0f1b1a;
     height: 30%;
@@ -35,6 +35,7 @@
     justify-content: center;
     align-items: center;
     color: #fff;
+    text-decoration: none;
 
     .user-img {
       //  background-color: #fff;
@@ -64,13 +65,16 @@
     }
   }
 
+  #dark::before,
+  #dark::after {
+    background-color: #121212;
+  }
+
   .menu-footer {
     height: 70%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding-top: 2rem;
-
+    margin-top: 5rem;
     .menu::before {
       @include afterBeforeMenuItem();
       border-bottom-right-radius: 20px;
@@ -102,6 +106,11 @@
           color: #333;
           font-weight: bold;
         }
+      }
+
+      #dark-item::before,
+      #dark-item::after {
+        background-color: #303030;
       }
 
       .list-item {

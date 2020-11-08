@@ -21,7 +21,7 @@ let admin = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       error: true,
-      message: "Sorry you're not authenticated1",
+      message: "Sorry you're not authenticated",
     });
   }
 };

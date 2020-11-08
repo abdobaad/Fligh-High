@@ -14,6 +14,14 @@ $dark-green: #203836;
 
 @mixin citiesCont {
   @include CitiesList();
+  #activeDark:first-child {
+    border-color: #616161;
+    border-top: 1px solid #575757;
+    border-bottom: 1px solid #575757;
+  }
+  #activeDark {
+    border-bottom: 2px solid #575757;
+  }
   .city-matching:first-child {
     border-top: 1px solid #fff;
     border-radius: 0 0 20px 20px;
@@ -40,9 +48,19 @@ $dark-green: #203836;
   }
 }
 
-.main_container {
+@mixin Beforestyles {
+  content: "";
+  height: 3rem;
+  width: 2rem;
   background-color: $light-color;
-  width: 80%;
+  position: absolute;
+  top: -2rem;
+  z-index: -1;
+  border-radius: 7px;
+}
+
+.main_container {
+  width: 100%;
   padding: 1rem;
 
   .small {
@@ -148,26 +166,17 @@ $dark-green: #203836;
             right: 0;
             @include citiesCont();
           }
+
           .cities_search--container-1::before {
-            content: "";
-            height: 3rem;
-            width: 2rem;
-            background-color: $light-color;
-            position: absolute;
-            top: -2rem;
-            z-index: -1;
-            border-radius: 7px;
+            @include Beforestyles();
           }
           .cities_search--container-2::after {
-            content: "";
-            height: 3rem;
-            width: 2rem;
-            background-color: $light-color;
-            position: absolute;
-            top: -2rem;
+            @include Beforestyles();
             right: 0;
-            z-index: -1;
-            border-radius: 7px;
+          }
+          #dark::before,
+          #dark::after {
+            background-color: #616161 !important;
           }
           #loc-icon {
             margin-right: 1rem;

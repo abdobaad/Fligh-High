@@ -1,80 +1,67 @@
 import React from "react";
+import { connect } from "react-redux";
+import aeroplane from "../../sources/icons/aeroplane.svg"
+import SearchIcon from "../../sources/icons/search-flights.svg"
+import EmptyData from "../../sources/icons/box.svg"
+import EmptyResults from "../EmptyResults/EmptyResults";
 import "./Flights.scss";
+import LoadingFlights from "../LoadingFlights/LoadingFlights";
 
-const Flights = () => {
-  const flights = [
-    {
-      com_logo: "hhh",
-      com_name: "emirate",
-      airport_from_name: "FJK",
-      airport_from_time: "13:00",
-      airport_to_name: "MKD",
-      airport_to_time: "00:00",
-      flight_duration: "11h",
-      type: "NON-STOP",
-      price: 1300,
-    },
-    {
-      com_logo: "hhh",
-      com_name: "emirate",
-      airport_from: "FJK",
-      airport_from_time: "13:00",
-      airport_to: "MKD",
-      airport_to_time: "00:00",
-      flight_duration: "11h",
-      type: "NON-STOP",
-      price: 1300,
-    },
-    {
-      com_logo: "hhh",
-      com_name: "emirate",
-      airport_from: "FJK",
-      airport_from_time: "13:00",
-      airport_to: "MKD",
-      airport_to_time: "00:00",
-      flight_duration: "11h",
-      type: "NON-STOP",
-      price: 1300,
-    },
-    {
-      com_logo: "hhh",
-      com_name: "emirate",
-      airport_from: "FJK",
-      airport_from_time: "13:00",
-      airport_to: "MKD",
-      airport_to_time: "00:00",
-      flight_duration: "11h",
-      type: "NON-STOP",
-      price: 1300,
-    },
-  ];
 
+
+
+const Flights = (props) => {
+  console.log(props);
+  const {dark} = props;
   return (
     <div className="flights-container">
-      {flights.map((flight, i) => (
-        <div className={`flight`}>
-          <div className="logo">{flight.com_logo}</div>
-          <div className="from_airport airport-data">
-            <div className="place">{flight.airport_from_name}</div>
-            <div className="time">{flight.airport_from_time}</div>
-          </div>
-          <div className="name-duration">
-            <div className="company_name">{flight.com_name}</div>
-            <div className="flight_duration">{flight.flight_duration}</div>
-            <div className="flight_stops">{flight.type}</div>
-          </div>
-          <div className="to_airport  airport-data">
-            <div className="place">{flight.airport_to_name}</div>
-            <div className="time">{flight.airport_to_time}</div>
-          </div>
-          <div className="flight_booking">
-            <div className="price">{flight.price}</div>
-            <button type="submit">Book Now</button>
-          </div>
-        </div>
-      ))}
+      {props.loading ?
+         <EmptyResults loading={true} /> :
+          props.data ? 
+            props.data.flights ?
+              props.data.flights.Quotes.length !== 0 ? 
+              props.data.flights.Quotes.map((flight,i)=>{
+                  if(i<4){
+                  return  <div key={`${flight.QuoteId}--${i}`} id={dark && `dark`} className={`flight`}>
+            <div className="logo">
+              <img alt="logo" src={aeroplane} />
+            </div>
+            <div className="from_airport airport-data">
+                <div className="place">{props.airports.from.name}</div>
+                <div className="time"></div>
+            </div>
+            <div className="name-duration">
+                <div className="company_name">{props.data.flights.Carriers.map(carrie=> {
+                  if(carrie.CarrierId === flight.OutboundLeg.CarrierIds[0]){return carrie.Name}
+                })}</div>
+              
+              </div>
+              <div className="to_airport  airport-data">
+                <div className="place">{props.airports.to.name}</div>
+                <div className="time">{"10"}</div>
+              </div> 
+              <div className="flight_booking">
+              <div className="price"><span className="currency">{props.data.flights.Currencies[0].Symbol}</span>{flight.MinPrice}</div>
+                <button type="submit">Book Now</button>
+              </div>
+            </div>
+                  }
+          })
+          :<EmptyResults icon={EmptyData} text="Sorry,We couldn't Find any Flight" />
+        :
+        <EmptyResults icon={SearchIcon} text="Search For Flights" />
+      : 
+       <EmptyResults icon={SearchIcon} text="Search For Flights" />}
     </div>
   );
 };
 
-export default Flights;
+const mapStateToProps = state => {
+  return {
+    data: state.FlightsReducer.FlightsData,
+    airports:state.FlightsReducer.Locations,
+    dark:state.AppReducer.DarkMode
+  }
+}
+
+export default connect(mapStateToProps)(Flights);

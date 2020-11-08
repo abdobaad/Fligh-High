@@ -1,12 +1,26 @@
 import React from "react";
+import { connect } from "react-redux";
 import "./ResNav.scss";
 
-const ResNav = () => {
+const ResNav =(props) => {
+  const {data,dark} = props;
+  
   return (
-    <div className="head-container">
-      Result (<span> 25 </span>)
+    <div style={dark ? {color:"#fff"} : null } className="head-container">
+      { data ? 
+            data.flights ? 
+              <> Results (<span>{data.flights.Quotes.length}</span>) </>
+            : null
+        :null}
     </div>
   );
 };
 
-export default ResNav;
+const mapStateToProps = state => {
+  return {
+    data: state.FlightsReducer.FlightsData,
+    dark:state.AppReducer.DarkMode
+  }
+}
+
+export default connect(mapStateToProps)(ResNav);

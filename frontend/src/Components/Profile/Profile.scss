@@ -1,0 +1,65 @@
+.profile-component {
+  display: flex;
+
+  .profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh;
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+
+    .user-data {
+      width: 50%;
+      background: #7fcbae;
+      position: relative;
+      box-shadow: 0 2px 10px -1px #333;
+      .user-img {
+        position: absolute;
+        height: 10rem;
+        width: 30%;
+        top: -4rem;
+        left: -4rem;
+
+        img {
+          height: 100%;
+          width: 100%;
+          position: relative;
+          z-index: 10;
+          border-radius: 0 0 14px 0;
+        }
+      }
+      /*.user-img::after {
+      content: "";
+      width: 31%;
+      height: 96%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #7fcbae;
+      box-shadow: 0px 4px 8px 2px #333;
+    }*/
+      .user-info {
+        height: 20rem;
+        text-align: center;
+
+        .name {
+          font-size: 2rem;
+          height: 5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #203836;
+          color: #fff;
+          font-weight: bold;
+        }
+
+        .email {
+          margin: 2rem;
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+}

@@ -2,22 +2,42 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
+
+
 let auth = async (req, res, next) => {
   try {
-    const authToken = await req.headers.cookie.split("=")[1];
-    // is the token exists
+    const authToken = await req.headers.cookie;
+
     if (!authToken) {
-      res.user = null;
-      next();
+      req.user = null;
+      return next();
     }
-    //is the token correct
-    const userData = await jwt.verify(authToken, process.env.PRIVATE_KEY);
-    req.user = userData._id;
+
+    const token = await authToken.split("=")[1];
+
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const user = await jwt.verify(token, process.env.PRIVATE_KEY);
+
+    if (!user) {
+      return res.json({
+        status: 404,
+        message: "Sorry you are not authenticated",
+      });
+    }
+
+    req.user = await user._id;
+
+
     next();
   } catch (error) {
-    res.status(400).json({
-      error: true,
-      message: "Not authenticated!",
+    res.json({
+      status: 404,
+      error: error.message,
+      message: "Sorry you are not authenticated",
     });
   }
 };

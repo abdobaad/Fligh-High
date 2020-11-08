@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    max: 255,
-  },
-  lastName: {
+  fullName: {
     type: String,
     required: true,
     max: 255,
@@ -14,7 +9,7 @@ const UserSchema = mongoose.Schema({
   avatar: {
     type: String,
     default:
-      "https://www.zalinawalchlilifestyle.com/wp-content/themes/zalinawalchlilifestyle/assets/images/no-image.png",
+      "https://www.flaticon.com/svg/static/icons/svg/3135/3135715.svg",
   },
   email: {
     type: String,

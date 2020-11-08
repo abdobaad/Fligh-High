@@ -4,7 +4,7 @@ import {
     AUTH_USER,
     LOGOUT_USER,
    
-  } from "../Actions/UserActions/types";
+  } from "../Actions/types";
 
 
 export default  (state = {},action) => {
@@ -14,7 +14,11 @@ export default  (state = {},action) => {
        case LOGIN_USER:
         return {...state,LoginUser:payload}
         break;
-    
+       case AUTH_USER:
+         return {...state,AuthUser:payload}
+        break;
+      case LOGOUT_USER:
+        return {...state,logedOut:payload}
         default: 
         return {state}
    }

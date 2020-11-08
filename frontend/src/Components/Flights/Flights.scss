@@ -25,6 +25,20 @@
     border: none;
   }
 
+  #dark {
+    background-color: #616161;
+    color: #fff;
+    border-bottom: 2px dashed #303030;
+  }
+  #dark:last-child {
+    border: none;
+  }
+
+  #dark::after,
+  #dark::before {
+    background-color: #303030;
+  }
+
   .flight {
     display: flex;
     background-color: #fff;
@@ -36,11 +50,16 @@
     font-family: "Montserrat", sans-serif;
 
     .logo {
-      width: 25%;
+      width: 15%;
       @include center();
+
+      img {
+        height: 2rem;
+      }
     }
     .name-duration {
-      width: 15%;
+      width: 25%;
+      text-align: center;
       @include center();
       flex-direction: column;
       text-transform: uppercase;

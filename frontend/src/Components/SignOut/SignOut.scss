@@ -1,0 +1,40 @@
+.sign-out_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .data {
+    height: 10rem;
+    width: 30%;
+    background-color: #0f1b1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 20px;
+    position: relative;
+
+    h3 {
+      font-family: "Montserrat", sans-serif;
+      color: #e5efee;
+      margin-bottom: 3rem;
+    }
+    button {
+      font-family: "Montserrat", sans-serif;
+      padding: 0.5rem 1rem;
+      border: none;
+      color: #fff;
+      background-color: rgb(253, 75, 75);
+      border-radius: 10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin: 1rem;
+      height: 3rem;
+    }
+    button:hover {
+      cursor: pointer;
+    }
+  }
+}

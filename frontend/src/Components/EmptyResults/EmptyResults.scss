@@ -1,0 +1,21 @@
+.empty {
+  height: 100%;
+  background: #fff;
+  margin-right: 2rem;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    color: #333333dc;
+  }
+
+  img {
+    height: 6rem;
+    margin: 1rem;
+  }
+}
