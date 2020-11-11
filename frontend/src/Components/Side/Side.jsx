@@ -11,14 +11,13 @@ import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
 const AuthMenu = [
-  { name: "Profile", icon: HomeIcon, link: "/profile" },
   { name: "flights", icon: FlightIcon, link: "/" },
   {
     name: "settings",
     icon: SettingsIcon,
     link: "/settings",
   },
-
+  { name: "Profile", icon: HomeIcon, link: "/profile" },
   {name:"Sing Out",icon:LogoutIcon,link:"/sign-out"}
 ];
 
@@ -26,12 +25,12 @@ const NotAuthMenu = [
   { name: "flights", route:"flights", icon: FlightIcon, link: "/" },
   {
     name: "settings",
-    route:"settings",
+  
     icon: SettingsIcon,
     link: "/settings",
   },
-  {name:"sing In", route:"sign-in",icon:LoginIcon,link:"/sign-in"},
-  {name:"sing Up", route:"sign-up",icon:RegisterIcon,link:"/sign-up"}
+  {name:"sing In",icon:LoginIcon,link:"/sign-in"},
+  {name:"sing Up",icon:RegisterIcon,link:"/sign-up"}
 ];
 
 const style = {
@@ -42,19 +41,27 @@ const style = {
 
 const Side = (props) => {
   const {dark} = props;
-  console.log(props);
+ 
   const history = useHistory();
-
+  const [isAuth,setIsAuth] = useState(false);
   const [user,setUser] = useState({});
+  
   useEffect(() => {
       const fetchData = async () =>{
           const AuthUser =  await props.dispatch(AuthenticatedUser());
+          if(AuthUser.payload.data.Auth === true){
+            setIsAuth(true) 
+          }else{
+            setIsAuth(false)
+          }
           setUser(AuthUser.payload.data);
       }
   
       fetchData();
-  }, [])
-  const ShowListMenu = (menu) => {
+  }, []);
+
+
+  const ShowListMenu =  (menu) => {
     return menu.map((item,i)=>(
       <Link
       key={"item-" + i} 
@@ -83,7 +90,8 @@ const Side = (props) => {
       <div   style={dark ?style.darkColor:null} className="side_container">
             {        
               user ? 
-                user.Auth ?
+              user.Auth ?
+               <>
                     <Link to="/profile" className="user">
                       <div className="user-img">
                         <img
@@ -94,15 +102,29 @@ const Side = (props) => {
                         <div className="user-name">{user.user.fullName}</div>
                         <div className="user-email">{user.user.email}</div>
                     </Link>
-                  : <div style={{height:"30%"}}/> 
-              : 
-              <div style={{height:"30%"}} />
+                    <div  className={`menu-footer`} >
+                        <div  id={dark ? "dark" :null}   className="menu">
+                        {ShowListMenu(AuthMenu)}
+                        </div>
+                    </div>
+              </>
+                  :
+                  <>
+                   <div style={{height:"30%"}}/> 
+                   <div  className={`menu-footer`} >
+                        <div  id={dark ? "dark" :null}   className="menu">
+                        {ShowListMenu(NotAuthMenu)}
+                        </div>
+                    </div>
+                 </>
+              :
+              <div style={{height:"30%"}}/> 
+              
+              
             }
-           <div  className={`menu-footer`} >
-              <div  id={dark ? "dark" :null}   className="menu">
-               { ShowListMenu(user.Auth ? AuthMenu : NotAuthMenu)}
-              </div>
-            </div>
+
+                 
+           
       </div>
    
   );
