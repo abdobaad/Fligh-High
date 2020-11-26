@@ -19,8 +19,10 @@ const UserSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     min: 6,
+  },
+  profileId:{
+    type:String
   },
   role: {
     type: Number,

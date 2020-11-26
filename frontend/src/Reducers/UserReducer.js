@@ -21,5 +21,7 @@ export default  (state = {},action) => {
         return {...state,logedOut:payload}
         default: 
         return {state}
+      case "GOOGLE":
+        return {...state,googleAuth:payload}
    }
 }

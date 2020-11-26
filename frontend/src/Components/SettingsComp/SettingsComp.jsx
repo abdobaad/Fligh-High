@@ -8,23 +8,26 @@ import {DarkModeState} from '../../Actions/AppActions/AppAction';
 import Layout from '../../HOC/Layout';
 
 const SettingsComp = (props) => {
-    const {dark} = props;
     const [currencies,setCurrencies] = useState(CURRENCIES);
-    
+    const [OpenDark,setOpenDark] = useState(localStorage.getItem("dark-mode") === 'true')
 
-    const ActiveDarkMode = async () => {
-       await props.dispatch(DarkModeState(dark));       
-    }
+
+  const ActiveDarkMode =async () => {
+      await localStorage.setItem('dark-mode',!OpenDark);
+      await props.dispatch(DarkModeState(!OpenDark,'fetch'));
+      setOpenDark(!OpenDark);
+  }
     return (
         <Layout>
         <div className="comp-container">
             
             <div className="settings-container">
-            <div className="darkmode">
+                    <div className="darkmode">
                         <p className="title">Dark Mode: </p>
-                        <span onClick={()=> ActiveDarkMode()} id={dark ? 'active-dark' : ''} className="select-darkmode" />
+                        <span onClick={()=> ActiveDarkMode()} id={OpenDark ? 'active-dark' : ''} className="select-darkmode" />
                     </div>
                     <div className="currencies">
+                        <p className="title">Currency: </p>
                         <select onChange={(e)=> props.dispatch(ChooseCurrency(e.target.value))}  >
                             {currencies.map(currency=>(
                                 <option value={currency.currency} key={currency.currency}>{currency.name}</option>

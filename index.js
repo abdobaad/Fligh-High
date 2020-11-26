@@ -1,22 +1,67 @@
 const express = require("express");
+var passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const session = require("express-session");
 const cors = require("cors");
-const app = express();
+
 require("./DB/db");
 const Port = process.env.PORT || 5000;
 const { User } = require("./Models/UserSchema");
 const { auth } = require("./Middleware/auth");
 const { admin } = require("./Middleware/admin");
 const nodemailer = require("nodemailer");
-const  axios  = require("axios");
+const axios = require("axios");
+
+
+
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport config
+require("./config/passport");
+
 //////////   ///////////
 ////  Users Routes  ///
 ////////   ///////////
+
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google"),
+ async  (req, res) => {
+    const token = req.user.token;
+    
+    res.cookie("auth_token_google", token).redirect("http://localhost:3000/profile");
+  
+  }
+
+);
 
 app.put("/users/forgotpassword", async (req, res) => {
   try {
@@ -62,8 +107,8 @@ app.put("/users/forgotpassword", async (req, res) => {
     transporter.sendMail(options, (err, body) => {
       if (err) {
         res.json({
-          sent:false,
-          err
+          sent: false,
+          err,
         });
       }
 
@@ -83,7 +128,6 @@ app.post("/users/resetpassword", auth, async (req, res) => {
   try {
     const { existPassword, newPassword } = req.body;
     const user = await User.findById(req.user);
-  
 
     const checkPassword = await bcrypt.compare(existPassword, user.password);
 
@@ -140,41 +184,57 @@ app.get("/users/admin", auth, admin, (req, res) => {
   });
 });
 app.get("/users/auth", auth, async (req, res) => {
+
   try {
     if (!req.user) {
-      res.status(404).json({
+     return res.status(404).json({
+        Auth: false,
         error: true,
         message: "Sorry you're not allowed",
       });
     }
 
-    const allowedUser = await User.findOne({ _id: req.user });
+    let allowedUser;
 
-    if (!allowedUser) {
-      res.status(404).json({
-        error: true,
-        message: "Sorry this user doesn't exist",
-      });
+
+    if(req.type === 'google'){ 
+      allowedUser = await User.findOne({ profileId:req.user });
+    }else{
+    
+      allowedUser = await User.findOne({ _id:req.user });
+      console.log(allowedUser);
     }
 
-    const { fullName, email,avatar } = allowedUser;
+
+
+    if (!allowedUser) {
+       res.status(404).json({
+        Auth: false,
+          error: true,
+          message: "Sorry this user doesn't exist",
+      });
+
+      
+    }
+    const { fullName, email, avatar } = allowedUser;
     res.status(200).json({
       Auth: true,
       error: false,
-      user:{ fullName, email,avatar }
+      user: { fullName, email, avatar },
     });
   } catch (err) {
     res.json({
+      Auth:false,
       error: true,
       err,
       message: "Not Authenticated!",
-      place:"indexjs"
+      place: "indexjs",
     });
   }
 });
 app.post("/users/register", async (req, res) => {
   try {
-    const {  fullName, email, password } = req.body;
+    const { fullName, email, password } = req.body;
     //search if there a user with this email
     const isExist = await User.findOne({ email });
 
@@ -220,53 +280,64 @@ app.post("/users/register", async (req, res) => {
 app.post("/users/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-  //search for the user with the same unique email
-  const userByEmail = await User.findOne({ email });
-  if (!userByEmail) {
-    return res.json({
-      status: false,
-      isAuth: false,
-      message: "Sorry,the email or password correct !!",
-    });
-  }
-  //check if the password is correct
-  const passwordCorrect = await bcrypt.compare(password, userByEmail.password);
-  if (!passwordCorrect) {
-    return res.json({
-      status: false,
-      isAuth: false,
-      message: "Sorry,the email or password not correct !!",
-    });
-  }
-  //generate a token
-  const newtoken = await jwt.sign(
-    { _id: userByEmail._id },
-    process.env.PRIVATE_KEY,
-    { expiresIn: '1h' }
-  );
+    //search for the user with the same unique email
+    const userByEmail = await User.findOne({ email });
+    if (!userByEmail) {
+      return res.json({
+        status: false,
+        isAuth: false,
+        message: "Sorry,the email or password correct !!",
+      });
+    }
+    //check if the password is correct
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      userByEmail.password
+    );
+    if (!passwordCorrect) {
+      return res.json({
+        status: false,
+        isAuth: false,
+        message: "Sorry,the email or password not correct !!",
+      });
+    }
+    //generate a token
+    const newtoken = await jwt.sign(
+      { _id: userByEmail._id },
+      process.env.PRIVATE_KEY,
+      { expiresIn: "1h" }
+    );
 
-  //change the token to new one
-  userByEmail.token = newtoken;
-  //save data in db
-  await userByEmail.save();
+    //change the token to new one
+    userByEmail.token = newtoken;
+    //save data in db
+    await userByEmail.save();
 
-  res.cookie("auth_token", newtoken).json({
-    status: true,
-    message: "you are Logged in",
-    isAuth: true,
-    newtoken,
-  });
+    res.cookie("auth_token", newtoken).json({
+      status: true,
+      message: "you are Logged in",
+      isAuth: true,
+      newtoken,
+    });
   } catch (err) {
     res.json({
-      error:true,isAuth:false,err
-    })
+      error: true,
+      isAuth: false,
+      err,
+    });
   }
 });
 app.get("/users/logout", auth, async (req, res) => {
-
   try {
-    const user = await User.findById(req.user);
+  
+    let user;
+    if(req.type !== 'google'){
+      user =  await User.findById(req.user);
+    }else{
+      user =  await User.findOne({profileId:req.user});
+    }
 
+   
     if (!user) {
       res.status(400).json({
         error: true,
@@ -275,10 +346,19 @@ app.get("/users/logout", auth, async (req, res) => {
     }
     user.token = "";
     await user.save();
-    res.status(200).cookie("auth_token", "").json({
-      logout: true,
-      message: "Logout success",
-    });
+    if(req.type !== 'google'){
+      res.status(200).cookie("auth_token", "").json({
+        logout: true,
+        message: "Logout success",
+      });
+    }else{
+      res.status(200).cookie("auth_token_google", "").json({
+        logout: true,
+        message: "Logout success",
+      });
+
+    }
+    
   } catch (error) {
     res.status(400).json({
       error: true,
@@ -291,34 +371,42 @@ app.get("/users/logout", auth, async (req, res) => {
 //  FLIGHTS Routes   //
 ////////   ///////////
 
-app.post("/findflights",async (req,res)=>{
+
+app.post("/findflights", async (req, res) => {
   try {
-    const { from,to,date,toDate,currency,travellers,type,classType} = req.body;
- 
- const url =await `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/${currency}/en-US/${from}-sky/${to}-sky/${date}`;
- const flights = await axios({
-  "method":"GET", 
-   "url":url,
-  "headers":{
-  "content-type":"application/octet-stream",
-  "x-rapidapi-host":"skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-  "x-rapidapi-key":process.env.SKY_SCANNER_API,
-  "useQueryString":true
-  }});
+    const {
+      from,
+      to,
+      date,
+      toDate,
+      currency,
+      travellers,
+      type,
+      classType,
+    } = req.body;
 
-  res.status(200).json({
-    flights:flights.data
-  })
-  
+    const url = await `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/${currency}/en-US/${from}-sky/${to}-sky/${date}`;
+    const flights = await axios({
+      method: "GET",
+      url: url,
+      headers: {
+        "content-type": "application/octet-stream",
+        "x-rapidapi-host":
+          "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+        "x-rapidapi-key": process.env.SKY_SCANNER_API,
+        useQueryString: true,
+      },
+    });
+
+    res.status(200).json({
+      flights: flights.data,
+    });
   } catch (err) {
-   
     res.json({
-      error:err.response
-
-    })
+      error: err,
+    });
   }
-})
-
+});
 
 app.listen(Port, () => {
   console.log("Server Running at Port:" + Port);

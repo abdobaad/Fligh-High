@@ -17,29 +17,19 @@
       box-shadow: 0 2px 10px -1px #333;
       .user-img {
         position: absolute;
-        height: 10rem;
-        width: 30%;
-        top: -4rem;
-        left: -4rem;
+        border-radius: 50%;
+        overflow: hidden;
 
+        top: -1.5rem;
+        left: -1.5rem;
         img {
-          height: 100%;
-          width: 100%;
+          width: 8rem;
           position: relative;
           z-index: 10;
-          border-radius: 0 0 14px 0;
+          border-radius: 50%;
         }
       }
-      /*.user-img::after {
-      content: "";
-      width: 31%;
-      height: 96%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: #7fcbae;
-      box-shadow: 0px 4px 8px 2px #333;
-    }*/
+
       .user-info {
         height: 20rem;
         text-align: center;

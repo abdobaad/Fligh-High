@@ -39,3 +39,12 @@ export const SignMeOut = async () => {
         payload:logoutUser.data
     }
 }
+
+export const authWithGooglea =async () => {
+    const data = await axios.get("http://localhost:5000/auth/google/");
+    console.log(data);
+    return {
+        type:"GOOGLE",
+        payload:data.data     
+}
+}

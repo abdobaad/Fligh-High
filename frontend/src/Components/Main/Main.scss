@@ -63,6 +63,15 @@ $dark-green: #203836;
   width: 100%;
   padding: 1rem;
 
+  .alerts-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 1rem 0;
+  }
+
   .small {
     width: 45%;
     display: flex;

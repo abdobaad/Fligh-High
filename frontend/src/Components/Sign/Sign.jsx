@@ -28,7 +28,6 @@ import Side from '../Side/Side';
 import Layout from '../../HOC/Layout';
 
 
-  
 
 const Sign = (props) => {
     const {Sign,type,dark} = props;
@@ -44,7 +43,7 @@ const Sign = (props) => {
         password:"",
     })
     const [showAlert,setShowAlert] = useState(false); 
-    const [AlertType,setAlertType] = useState(true);
+    const [AlertType,setAlertType] = useState(false);
     const [message,setMessage] = useState([]);
     const [isLoading,setIsLoading] = useState(false);
 
@@ -84,7 +83,7 @@ const Sign = (props) => {
             if(newUser.payload.error){
                 return AlertHandler(newUser.payload.message);
             }else{
-            setAlertType(false);
+            setAlertType(true);
             AlertHandler(newUser.payload.message);
             setTimeout(() => {
                 history.push("/sign-in");
@@ -98,7 +97,7 @@ const Sign = (props) => {
             if(user.payload.error){
                 return AlertHandler(user.payload.message);
             }else{
-            setAlertType(false);
+            setAlertType(true);
             AlertHandler(user.payload.message);
             setTimeout(() => {
                 history.push("/profile");
@@ -123,8 +122,9 @@ const Sign = (props) => {
     return (
         <Layout>
         <div className="sign-container">
-        {showAlert ? <Alert type="user" isError={AlertType} err={message} closeError={()=>closeHandler()} /> : null}
-       
+        <div className="alerts-container">
+        {showAlert ? <Alert type="user" isNotError={AlertType} isError={AlertType} err={message} closeError={()=>closeHandler()} /> : null}
+        </div>
         <div className="data">
         <div id={dark ? `dark` : ""} className="user">
         <div className="links">
@@ -134,8 +134,8 @@ const Sign = (props) => {
         </div>
         <div className="form-container">
         <h1 className="form-title">{Sign}</h1>
+        <a href="http://localhost:5000/auth/google" className="sign-btn google"><img src={google} alt="google" /></a>
         <form onSubmit={(e)=> SubmitHandler(e)} >
-        <button className="sign-btn google" type="submit"><img src={google} alt="google" /></button>
         <div className="or"><span className="line"/> Or<span className="line"/></div>
         {type === "register" ? 
         <>            

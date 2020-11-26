@@ -17,7 +17,7 @@ const EmptyResults = ({loading,text,icon,dark}) => {
             {!loading ?
             <> 
                 <img src={icon} alt="empty"/>
-                <h2>{text}</h2>
+                <h2 style={dark ? {color:"#fff"}:null} >{text}</h2>
             </> 
            :
            <LoadingFlights />}         

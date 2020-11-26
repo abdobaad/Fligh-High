@@ -1,8 +1,5 @@
 .alert {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 1rem 2rem;
+  margin: 0.2rem 2rem;
   padding: 1rem;
 
   border-radius: 20px;
@@ -13,6 +10,8 @@
   font-family: "Secular One", sans-serif;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  width: auto;
 
   img {
     margin-left: 1rem;

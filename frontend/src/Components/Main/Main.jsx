@@ -55,7 +55,11 @@ const Main = (props) => {
   //alert and errors
   const [alert, setAlert] = useState(false);
   const [errors, setError] = useState([]);
+  const [AlertDate,setAlertDate] = useState(false);
+  
+ // const [dateValid,setdateValid] = 
   const [choseCity, setChoseCity] = useState(false);
+  const [AlertType,setAlertType] = useState("");
  
   const ChangeTripType = (name) => {
     const trip = name.split(" ").join("-");
@@ -116,55 +120,51 @@ const Main = (props) => {
   };
 
   const SubmitHandler = async (e) => {
+    let datePassed = false;
     e.preventDefault();
-    setIsLoading(true);
-    setClickSearch(!clickSearch)
-
-    if (!fromLocation) {
-      await errors.push("start location");
+    if (!fromLocation) await errors.push("start location");
+    if (!toLocation)await errors.push("end location");
+    if (!startDate)await errors.push("date");
+    if(new Date(startDate) < Date.now()){  
+      datePassed = true
+      setAlertDate(true);
     }
-
-    if (!toLocation) {
-      await errors.push("end location");
-    }
-
-    if (!startDate) {
-      await errors.push(" date ");
-    }
-
-    if (errors.length === 0) {
+    if(errors.length === 0 && !datePassed){
+      setIsLoading(true);
       const data = await {
         from: fromLocation,
         to: toLocation,
         date: startDate,
         travellers: NumOfTraveller,
-       // toDate:"5-20-2020",
         type: tripType,
         classType: flightClass,
         currency: props.currency ? props.currency : "USD" 
       };
-  await props.dispatch(AirportsLocation({
-    from:{
-      name:fromLocation,
-      city:fromAirCity
-    },
-    to:{
-      name:toLocation,
-      city:toAirCity
-    }
-  }))
-   await props.dispatch(SearchFlights(data));
-   setClickSearch(false);
-   setIsLoading(false);
-   //console.log(flights);
+
+      await props.dispatch(AirportsLocation({
+        from:{
+          name:fromLocation,
+          city:fromAirCity
+        },
+        to:{
+          name:toLocation,
+          city:toAirCity
+        }
+      }))
+      await props.dispatch(SearchFlights(data));
+      setIsLoading(false);
     } else {
-      setAlert(true);
-      setIsLoading(false)
+      if(errors.length !== 0){
+        setAlert(true)
+      }   
       setTimeout(() => {
         setAlert(false);
         setError([]);
+        setAlertDate(false);
+        datePassed = false
       }, 3000);
-    }
+      }
+    
   };
   const SearchCoordinates =async (loc,type) => {
    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${loc}.json?access_token=pk.eyJ1IjoiYWJkb2JhYWQiLCJhIjoiY2p6Ymw0N2NwMDAxdzNscG1xM3l1azRhNCJ9.mek99-fcVGrCZp9-0XBM6w`;
@@ -202,7 +202,12 @@ const Main = (props) => {
 
   return (
     <div className="main_container">
-      {alert ? <Alert closeError={() => closeHandler()} err={errors} /> : null}
+      {alert || AlertDate ?
+      <div className="alerts-container">
+      {alert ? <Alert  type="requires" closeError={() => closeHandler()} err={errors} /> : null}
+      {AlertDate ? <Alert type="passedDate" closeError={() => closeHandler()} err={"this date alerady passed"} /> : null}
+      </div>
+       : null }
       <div style={dark ? styles.darkColor : null} className="search-section">
         <div className="search_top">
           <div  style={dark ? styles.lightColor : null } className="location-container">

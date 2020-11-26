@@ -41,11 +41,10 @@ const style = {
 
 const Side = (props) => {
   const {dark} = props;
- 
   const history = useHistory();
+  const [active,setActive] = useState(window.location.pathname);
   const [isAuth,setIsAuth] = useState(false);
   const [user,setUser] = useState({});
-  
   useEffect(() => {
       const fetchData = async () =>{
           const AuthUser =  await props.dispatch(AuthenticatedUser());
@@ -59,32 +58,25 @@ const Side = (props) => {
   
       fetchData();
   }, []);
-
-
   const ShowListMenu =  (menu) => {
     return menu.map((item,i)=>(
       <Link
-      key={"item-" + i} 
-      to={item.link}
-
-    >
-      {item.link === history.location.pathname ? null : <div style={dark ?style.darkColor:null}   className="added"></div>}
-
-      <div
-   //  onClick={(e) => GoToLink(e, item.name,item.link)} 
-        style={item.link === history.location.pathname ? dark ?  style.lightColor : null : null }
+        key={"item-" + i} 
+        to={item.link}
        
-        id={dark ?`dark-item`:null }
-        className={`list-item ${
-          item.link === history.location.pathname ? "active" : ""
-        }`}
-      >
-        <img src={item.icon} alt={`icon-${item.name}`} />
-        <span style={dark ? {color:"#fff"} : null}>{item.name}</span>
-      </div>
+        >
+        {item.link === active ? null : <div style={dark ?style.darkColor:null}   className="added"></div>}
+        <div
+          style={item.link === active ? dark ?  style.lightColor : null : null }
+          id={dark ?`dark-item`:null }
+          className={`list-item ${item.link === active ? "active" : ""}`}>
+            <img src={item.icon} alt={`icon-${item.name}`} />
+            <span style={dark ? {color:"#fff"} : null}>{item.name}</span>
+        </div>
     </Link>
     ))
   };
+  console.log(user);
   return (
   
       <div   style={dark ?style.darkColor:null} className="side_container">
@@ -96,7 +88,7 @@ const Side = (props) => {
                       <div className="user-img">
                         <img
                           alt="me"
-                          src="https://www.flaticon.com/svg/static/icons/svg/3135/3135715.svg"
+                          src={user.user.avatar}
                         />
                       </div>
                         <div className="user-name">{user.user.fullName}</div>
@@ -118,13 +110,8 @@ const Side = (props) => {
                     </div>
                  </>
               :
-              <div style={{height:"30%"}}/> 
-              
-              
-            }
-
-                 
-           
+              <div style={{height:"30%"}}/>  
+            }    
       </div>
    
   );
