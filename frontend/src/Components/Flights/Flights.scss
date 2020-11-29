@@ -133,3 +133,31 @@
     width: 0;
   }
 }
+
+@media screen and (max-width: 900px) {
+  .flights-container {
+    .flight {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .flights-container {
+    .flight {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 2rem;
+
+      .logo {
+        display: none;
+      }
+
+      .name-duration,
+      .flight_booking,
+      .airport-data {
+        width: 100%;
+      }
+    }
+  }
+}

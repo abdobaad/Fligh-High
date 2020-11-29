@@ -212,3 +212,34 @@ $dark-green: #2a3820;
     } */
   }
 }
+
+@media screen and (max-width: 1000px) {
+  .sign-container {
+    .data {
+      .user {
+        .form-container {
+          width: 80%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .sign-container {
+    .data {
+      .user {
+        width: 100%;
+        border-radius: 0;
+        .form-container {
+          width: 85%;
+        }
+      }
+
+      .background {
+        width: 0;
+        display: none;
+      }
+    }
+  }
+}

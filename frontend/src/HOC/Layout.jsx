@@ -12,7 +12,7 @@ const Layout = (props) => {
     return (
         <div style={dark ? styles.darkModeActive : null} className="layout-Container" >
         <Side />
-        <div style={{width:"80%"}}>
+        <div className="main-app_container" >
             {children}
         </div>
         </div>

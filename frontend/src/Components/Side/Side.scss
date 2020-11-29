@@ -24,7 +24,7 @@
   background-color: #4f5c56;
   border-radius: 0 2rem 2rem 0;
   overflow: hidden;
-  position: relative;
+  position: fixed;
   font-family: "Montserrat", sans-serif;
   z-index: 1;
   .user {
@@ -133,7 +133,7 @@
 
         span {
           text-transform: uppercase;
-          margin-left: 2rem;
+          // margin-left: 2rem;
           position: absolute;
           z-index: 100000;
           margin-left: 4rem;
@@ -186,6 +186,155 @@
         width: 9rem;
         position: absolute;
         bottom: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 912px) {
+  .side_container {
+    .user {
+      .user-name {
+        font-size: 0.7rem;
+      }
+      .user-email {
+        font-size: 0.4rem;
+      }
+    }
+      .menu-footer {
+      .menu {
+        .list-item {
+          span {
+            margin-left: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .side_container {
+    width: 10%;
+    .menu-footer {
+      .menu {
+        .list-item {
+          span {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 750px) {
+  .side_container {
+    width: 10%;
+    .user {
+      .user-name,
+      .user-email {
+        display: none;
+      }
+
+      .user-img {
+        height: 3.5rem;
+        width: 3.5rem;
+
+        img {
+          height: 3rem;
+          width: 3rem;
+        }
+      }
+    }
+    .menu-footer {
+      .menu {
+        .list-item {
+          // background-color: yellow !important;
+          span {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 680px) {
+  @mixin afterBeforeMenuItem {
+    bottom: 0;
+    top: initial;
+  }
+  .side_container {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    position: absolute;
+    border-radius: 0 0 2rem 2rem;
+    .user {
+      display: none;
+    }
+    .menu-footer {
+      margin-top: 0;
+      width: 100%;
+      height: auto;
+      flex-direction: row;
+      justify-content: center;
+      .menu::before {
+        @include afterBeforeMenuItem();
+        border-bottom-right-radius: 15px;
+
+        left: -2rem;
+      }
+      .menu::after {
+        @include afterBeforeMenuItem();
+        border-bottom-left-radius: 15px;
+        right: -2rem;
+      }
+      .menu {
+        display: flex;
+        width: 50%;
+        height: 100%;
+        justify-content: center;
+        margin-bottom: 0;
+
+        a {
+          width: 25%;
+          display: flex;
+          justify-content: center;
+        }
+
+        .added {
+          width: 25%;
+          height: 100%;
+          border-radius: 0 0 15px 15px;
+          margin: 0;
+        }
+
+        .active::after {
+          top: initial;
+          bottom: 0;
+          right: -1rem;
+          height: 1rem;
+        }
+
+        .active::before {
+          left: -1rem;
+          bottom: 0;
+          height: 1rem;
+        }
+        .list-item {
+          height: 100%;
+          margin-left: 1rem;
+          justify-content: center;
+          padding-left: 0;
+          margin: 0;
+          border-radius: 20px 20px 0 0;
+          width: 100%;
+          // background-color: yellow !important;
+          span {
+            display: none;
+          }
+        }
       }
     }
   }

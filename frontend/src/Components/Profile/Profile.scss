@@ -53,3 +53,39 @@
     }
   }
 }
+
+@media screen and (max-width: 1250px) {
+  .profile-component {
+    .profile-container {
+      .user-data {
+        width: 60%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .profile-component {
+    .profile-container {
+      .user-data {
+        width: 70%;
+        .user-info {
+          .name {
+            justify-content: flex-end;
+            padding-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .profile-component {
+    .profile-container {
+      .user-data {
+        width: 90%;
+      }
+    }
+  }
+}

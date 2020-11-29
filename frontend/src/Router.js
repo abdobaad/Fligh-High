@@ -12,11 +12,12 @@ import { AuthenticatedUser } from './Actions/UserActions/UserAction';
 import { DarkModeState } from './Actions/AppActions/AppAction';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-   
+    console.log(rest.user);
     return rest.user ? (
       rest.user.data.Auth ? (
         <Route exact {...rest} component={Component} />
-      ) : null
+      ) :         <Redirect to="/sign-in" />
+
     ) : null;
   };
   

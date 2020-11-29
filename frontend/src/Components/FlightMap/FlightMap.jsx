@@ -43,8 +43,9 @@ const FlightMap = ({airports,change}) => {
 
 
       </div>
-      {/* <Map /> process.env.REACT_APP_MAPBOX_TOKEN*/}
-     
+     <div className="map-container">
+
+    
       <ReactMapGl mapStyle="mapbox://styles/abdobaad/ckh1zcuzs17fs19qggu8x9p59" {...viewPort}
                        mapboxApiAccessToken="pk.eyJ1IjoiYWJkb2JhYWQiLCJhIjoiY2p6Ymw0N2NwMDAxdzNscG1xM3l1azRhNCJ9.mek99-fcVGrCZp9-0XBM6w" 
                         onViewportChange={viewPort=> setViewPort(viewPort)}
@@ -57,19 +58,7 @@ const FlightMap = ({airports,change}) => {
                           </Marker>}
       </ReactMapGl>
      
-     {/*  <div className="bottom">
-        <div className="stops-filter ">
-          <div className="stop">NO-STOP</div>
-          <div className="stop">ONE-STOP</div>
-          <div className="stop">MORE-STOPS</div>
-        </div>
-        <div className="price-filter">
-          <div className="title">price</div>
-          <div className="prices-ligne" />
-          <div className="min" />
-          <div className="max" />
-        </div>
-      </div> */}
+      </div>
     </div>
   );
 };

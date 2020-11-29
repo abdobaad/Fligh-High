@@ -3,3 +3,13 @@
   width: 100%;
   height: 400px;
 }
+
+@media screen and (max-width: 900px) {
+  .result-contianer {
+    height: 800px;
+
+    .flight_map-container {
+      height: 400px;
+    }
+  }
+}

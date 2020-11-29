@@ -20,6 +20,15 @@
   color: #fff;
   font-family: "Montserrat", sans-serif;
 
+  .map-container {
+    height: 80%;
+    overflow: hidden;
+    border-radius: 20px;
+    div {
+      height: 100% !important;
+    }
+  }
+
   .top {
     display: flex;
     height: 20%;
@@ -42,57 +51,4 @@
       }
     }
   }
-  .map-container {
-    height: 200px;
-  }
-  /*   .bottom {
-    height: 30%;
-    width: 100%;
-    background-color: #0f1b1a;
-    // padding: 0.5rem 0;
-    @include centerColumn();
-    justify-content: start;
-
-    .stops-filter {
-      margin-top: 0.8rem;
-      display: flex;
-      justify-content: space-between;
-      width: 90%;
-      .stop {
-        font-size: 0.7rem;
-        padding: 0.5rem 0.8rem;
-        background-color: #b4955a;
-        border-radius: 20px;
-        font-weight: bold;
-      }
-    }
-    .price-filter {
-      padding: 0.5rem;
-      position: relative;
-      width: 100%;
-      height: 75%;
-      .title {
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-      }
-
-      .prices-ligne {
-        width: 95%;
-
-        background-color: #e5efee9a;
-        height: 1.5px;
-        border-radius: 20px;
-        margin: 0 auto;
-      }
-
-      .min {
-        @include priceBall();
-        left: 3rem;
-      }
-      .max {
-        @include priceBall();
-        right: 5rem;
-      }
-    }
-  } */
 }

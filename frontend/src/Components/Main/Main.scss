@@ -62,6 +62,7 @@ $dark-green: #203836;
 .main_container {
   width: 100%;
   padding: 1rem;
+  padding-bottom: 1.95rem;
 
   .alerts-container {
     display: flex;
@@ -332,6 +333,108 @@ $dark-green: #203836;
         .search:active {
           transform: translateY(0px);
           outline: none;
+        }
+      }
+    }
+  }
+}
+
+///Media query
+
+@media screen and (max-width: 1055px) {
+  .main_container {
+    .search-section {
+      .search_top {
+        .traveller {
+          #icon {
+            margin: 0 0.5rem;
+          }
+          .number_of {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .main_container {
+    .small {
+      width: 49%;
+    }
+    .search-section {
+      .search_top {
+        flex-direction: column;
+        .location-container {
+          width: 100%;
+        }
+        .right-container {
+          width: 100%;
+          margin-top: 1rem;
+          padding-left: 0;
+        }
+      }
+      .search_bottom {
+        flex-direction: column;
+        .flight_type--container {
+          width: 100%;
+        }
+        .right-container {
+          width: 100%;
+          margin-top: 1rem;
+          padding-left: 0;
+        }
+      }
+    }
+    .result-contianer {
+      flex-direction: column;
+      .flights-container {
+        width: 90%;
+        margin: 0 auto;
+
+        .empty {
+          margin-right: 0;
+        }
+      }
+      .flight_map-container {
+        width: 90%;
+        margin: 2rem auto 0 auto;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .main_container {
+    .small {
+      width: 100%;
+      margin: 1rem 0;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      input {
+        width: 100%;
+      }
+    }
+
+    .right-container {
+      flex-direction: column;
+    }
+    .search-section {
+      .search_bottom {
+        .type {
+          font-size: 0.7rem;
+          letter-spacing: 1px;
+        }
+        .flight_type--container {
+          height: 4rem;
+
+          .active {
+            border-radius: 25px;
+          }
         }
       }
     }
