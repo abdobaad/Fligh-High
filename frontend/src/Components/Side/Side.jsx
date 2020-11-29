@@ -34,7 +34,7 @@ const NotAuthMenu = [
 ];
 
 const style = {
-  darkColor:{backgroundColor:"#121212"},
+  darkColor:{backgroundColor:"#191717"},
   secondDarkColor:{},
   lightColor:{backgroundColor:"#303030"}
 }
