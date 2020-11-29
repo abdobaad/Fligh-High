@@ -225,6 +225,18 @@ $dark-green: #2a3820;
   }
 }
 
+@media screen and (max-width: 1000px) {
+  .sign-container {
+    .data {
+      .user {
+        
+          width: 85%;
+        
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 680px) {
   .sign-container {
     .data {
