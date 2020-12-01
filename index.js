@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const cors = require("cors");
-
+const path = require("path")
 require("./DB/db");
 const Port = process.env.PORT || 5000;
 const { User } = require("./Models/UserSchema");
@@ -407,6 +407,15 @@ app.post("/findflights", async (req, res) => {
     });
   }
 });
+
+
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('frontend/build'));
+
+  app.get("*",(req,res)=>{
+    res.sendFile(path.resolve(__dirname,'frontend','build','index.html'))
+  })
+}
 
 app.listen(Port, () => {
   console.log("Server Running at Port:" + Port);
