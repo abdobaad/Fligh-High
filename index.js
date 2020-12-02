@@ -56,8 +56,8 @@ app.get(
   passport.authenticate("google"),
  async  (req, res) => {
     const token = req.user.token;
-    
-    res.cookie("auth_token_google", token).redirect("http://localhost:3000/profile");
+    const frontendUrl = process.env.CLIENT_URL;
+    res.cookie("auth_token_google", token).redirect(frontendUrl ? `${frontendUrl}/profile` : '/profile' );
   
   }
 
