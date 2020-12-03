@@ -134,7 +134,7 @@ const Sign = (props) => {
         </div>
         <div className="form-container">
         <h1 className="form-title">{Sign}</h1>
-        <a href="/auth/google" className="sign-btn google"><img src={google} alt="google" /></a>
+        <a href="https://cheapestflight.herokuapp.com/auth/google" className="sign-btn google"><img src={google} alt="google" /></a>
         <form onSubmit={(e)=> SubmitHandler(e)} >
         <div className="or"><span className="line"/> Or<span className="line"/></div>
         {type === "register" ? 
