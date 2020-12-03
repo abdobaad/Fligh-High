@@ -2,6 +2,7 @@ const { User } = require("../Models/UserSchema");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const jwt  = require("jsonwebtoken");
+require("dotenv").config();
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
