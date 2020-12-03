@@ -2,7 +2,7 @@ const express = require("express");
 var passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const session = require("express-session");
+const session = require("cookie-session");
 const cors = require("cors");
 const path = require("path")
 require("./DB/db");
@@ -20,6 +20,26 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.set('trust proxy', 1);
+
+/* app.use(session({
+cookie:{
+    secure: true,
+    maxAge:60000
+       },
+store: new RedisStore(),
+secret: 'secret',
+saveUninitialized: true,
+resave: false
+}));
+
+app.use(function(req,res,next){
+if(!req.session){
+    return next(new Error('Oh no')) //handle error
+}
+next() //otherwise continue
+}); */
 
 app.use(
   session({
