@@ -2,7 +2,8 @@ const express = require("express");
 var passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const session = require("cookie-session");
+const session = require("express-session");
+const MemoryStore = require('memorystore')(session)
 const cors = require("cors");
 const path = require("path")
 require("./DB/db");
@@ -23,31 +24,18 @@ app.use(express.json());
 
 app.set('trust proxy', 1);
 
-/* app.use(session({
-cookie:{
-    secure: true,
-    maxAge:60000
-       },
-store: new RedisStore(),
-secret: 'secret',
-saveUninitialized: true,
-resave: false
-}));
-
-app.use(function(req,res,next){
-if(!req.session){
-    return next(new Error('Oh no')) //handle error
-}
-next() //otherwise continue
-}); */
-
 app.use(
   session({
+    cookie: { maxAge: 86400000 },
     secret: "keyboard cat",
+    store: new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    }),
     resave: false,
     saveUninitialized: false,
   })
 );
+
 
 // Passport Middleware
 app.use(passport.initialize());
